@@ -59,6 +59,8 @@ Todos os serviços estão conectados à rede `monitoring` para garantir a comuni
 
 As APIs de Cadastro, Alteração e Exclusão interagem com filas específicas do RabbitMQ para garantir comunicação assíncrona eficaz. A API de Consulta não utiliza filas.
 
+![image](https://github.com/user-attachments/assets/4eb8a0d2-b73c-4646-8ea9-89a424e13bdc)
+
 ## Testes
 
 O projeto inclui testes de integração e unitários para garantir a qualidade e a funcionalidade das APIs.
