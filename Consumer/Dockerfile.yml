@@ -1,0 +1,46 @@
+# Etapa base: imagem de runtime para o contêiner
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Expõe a porta para comunicação, se necessário
+EXPOSE 80
+
+ENV ASPNETCORE_URLS=http://+:80
+
+# Etapa de construção: imagem com o SDK do .NET para construir o aplicativo
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Define o diretório de trabalho
+WORKDIR /src
+
+# Copia os arquivos .csproj e restaura as dependências para todos os projetos
+COPY ["ProdutorAPI/ProdutorAPI.csproj", "ProdutorAPI/"]
+COPY ["Consumer/Consumer.csproj", "Consumer/"]
+RUN dotnet restore "Consumer/Consumer.csproj"
+
+# Copia os arquivos do projeto e constrói todos os projetos
+COPY . .
+WORKDIR "/src/ProdutorAPI"
+RUN dotnet build "ProdutorAPI.csproj" -c Release -o /app/build
+
+WORKDIR "/src/Consumer"
+RUN dotnet build "Consumer.csproj" -c Release -o /app/build
+
+# Etapa de publicação: compila e publica todos os projetos
+FROM build AS publish
+WORKDIR "/src/Consumer"
+RUN dotnet publish "Consumer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Etapa final: usa a imagem base para executar o aplicativo
+FROM base AS final
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia os arquivos publicados da etapa de publicação
+COPY --from=publish /app/publish .
+
+# Define o comando padrão para iniciar o aplicativo
+ENTRYPOINT ["dotnet", "Consumer.dll"]

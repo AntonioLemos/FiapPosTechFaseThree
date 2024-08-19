@@ -1,0 +1,164 @@
+version: '3.4'
+
+networks:
+  monitoring:
+    external: true
+
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  sqlserver-data:
+    driver: local
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=#sa123456789
+    ports:
+      - "1433:1433"
+    networks:
+      - monitoring
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    restart: unless-stopped
+
+  rabbitmq:
+    image: masstransit/rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - monitoring
+
+  consultaapi:          
+    image: ${DOCKER_REGISTRY-}consultaapi
+    build:
+      context: .
+      dockerfile: ConsultaAPI/Dockerfile
+    ports:
+      - 32766:5135
+    environment: 
+      - CI=false
+      - Otel__Endpoint=http://otlp-collector:4317
+    networks:
+      - monitoring
+
+  cadastroapi:
+    image: ${DOCKER_REGISTRY-}cadastroapi
+    build:
+      context: .
+      dockerfile: CadastroAPI/Dockerfile
+    ports:
+      - 32768:5131
+    environment:
+      - CI=false
+      - Otel__Endpoint=http://otlp-collector:4317
+    networks:
+      - monitoring
+      
+  alteraapi:
+    image: ${DOCKER_REGISTRY-}alteraapi
+    build:
+      context: .
+      dockerfile: AlteraAPI/Dockerfile
+    ports:
+      - 32769:5132
+    environment:
+      - CI=false
+      - Otel__Endpoint=http://otlp-collector:4317
+    networks:
+      - monitoring 
+
+  deletaapi:
+      image: ${DOCKER_REGISTRY-}deletaapi
+      build:
+        context: .
+        dockerfile: DeleteAPI/Dockerfile
+      ports:
+        - 32767:5134
+      environment:
+        - CI=false
+        - Otel__Endpoint=http://otlp-collector:4317
+      networks:
+        - monitoring 
+      
+  otlp-collector:
+    image: otel/opentelemetry-collector:0.95.0
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./config/otel-collector-config.yml:/etc/otel-collector-config.yml
+    ports:
+      - "8888:8888"
+      - "8889:8889"
+      - "13133:13133"
+      - "4317:4317"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - monitoring
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.5.0
+    container_name: node_exporter
+    command: '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - monitoring
+  
+  consumer:
+    image: ${DOCKER_REGISTRY-}consumer
+    build:
+      context: .
+      dockerfile: Consumer\Dockerfile.yml
+    networks:
+      - monitoring
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Otel__Endpoint: http://otlp-collector:4317
+    ports:
+      - 8081:80
+
+  productor:
+    image: ${DOCKER_REGISTRY-}produtor
+    build:
+      context: .
+      dockerfile: ProdutorAPI\Dockerfile
+    networks:
+      - monitoring
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Otel__Endpoint: http://otlp-collector:4317
+    ports:
+      - 8089:5133

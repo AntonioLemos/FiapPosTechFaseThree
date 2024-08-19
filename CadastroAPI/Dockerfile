@@ -1,0 +1,26 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 5131
+
+ENV ASPNETCORE_URLS=http://+:5131
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["CadastroAPI/CadastroAPI.csproj", "CadastroAPI/"]
+COPY ["Data/Data.csproj", "Data/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+RUN dotnet restore "./CadastroAPI/CadastroAPI.csproj"
+COPY . .
+WORKDIR "/src/CadastroAPI"
+RUN dotnet build "./CadastroAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./CadastroAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "CadastroAPI.dll"]
