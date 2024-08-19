@@ -34,7 +34,8 @@ Criamos quatro workflows no GitHub Actions para isolar a construção e publica�
 3. **Workflow 3**: API de Exclusão
 4. **Workflow 4**: API de Consulta
 
-![image](https://github.com/user-attachments/assets/a89a59c7-bfe9-4581-9b90-d41f3800b74b)
+![Readme](https://github.com/user-attachments/assets/81a5fe5f-cf0b-497c-abfb-82b7c78737a4)
+
 
 ## Docker Compose
 
@@ -51,7 +52,8 @@ O projeto utiliza Docker Compose para gerenciar e orquestrar os seguintes servi�
 
 Todos os serviços estão conectados à rede `monitoring` para garantir a comunicação e integração entre eles.
 
-![image](https://github.com/user-attachments/assets/a5d9cefc-4a9f-44e1-bed4-0261a60e957a)
+![Readme2](https://github.com/user-attachments/assets/32b00384-b456-4a67-b097-2c0164d68e7c)
+
 
 ## Implementação das Filas
 
@@ -67,4 +69,5 @@ O projeto inclui testes de integração e unitários para garantir a qualidade e
 - **Prometheus**: Coleta métricas de desempenho.
 - **Grafana**: Exibe dados coletados pelo Prometheus.
 
-![image](https://github.com/user-attachments/assets/475efb1d-d5ae-4b70-b16f-09c066f2780e)
+![image](https://github.com/user-attachments/assets/66c7f4f2-9a8c-47a8-b0e5-80e4b2748b71)
+
