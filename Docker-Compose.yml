@@ -46,6 +46,8 @@ services:
       - Otel__Endpoint=http://otlp-collector:4317
     networks:
       - monitoring
+    depends_on:
+      - sqlserver
 
   cadastroapi:
     image: ${DOCKER_REGISTRY-}cadastroapi
@@ -59,6 +61,8 @@ services:
       - Otel__Endpoint=http://otlp-collector:4317
     networks:
       - monitoring
+    depends_on:
+      - sqlserver
       
   alteraapi:
     image: ${DOCKER_REGISTRY-}alteraapi
@@ -72,6 +76,8 @@ services:
       - Otel__Endpoint=http://otlp-collector:4317
     networks:
       - monitoring 
+    depends_on:
+      - sqlserver      
 
   deletaapi:
       image: ${DOCKER_REGISTRY-}deletaapi
@@ -84,7 +90,9 @@ services:
         - CI=false
         - Otel__Endpoint=http://otlp-collector:4317
       networks:
-        - monitoring 
+        - monitoring
+      depends_on:
+        - sqlserver  
       
   otlp-collector:
     image: otel/opentelemetry-collector:0.95.0
