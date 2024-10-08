@@ -41,6 +41,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapGet("/", () => "Produtor!");
+
 app.MapPost("/contato", async ([FromBody] MessageViewModel<ContatoViewModel> contatoViewModel, IBus bus, IConfiguration configuration) =>
 {
     try
