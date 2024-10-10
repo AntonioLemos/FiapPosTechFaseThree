@@ -22,8 +22,7 @@ namespace Consumer.Eventos
                 var content = new StringContent(contato, Encoding.UTF8, "application/json");
 
 
-              //  var response = await _httpClient.PostAsync("https://localhost:7014/contato-integration", content);
-                var response = await _httpClient.PostAsync("http://cadastroapi:5131/contato-integration", content);
+                var response = await _httpClient.PostAsync("http://cadastroapi:8080/contato-integration", content);
                 var responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(responseBody ?? "Dados não encontrados");
                 await Task.CompletedTask;

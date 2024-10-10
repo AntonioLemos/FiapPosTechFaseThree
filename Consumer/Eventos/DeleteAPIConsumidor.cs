@@ -18,8 +18,7 @@ namespace Consumer.Eventos
                 HttpClient _httpClient = new HttpClient();
                 Console.WriteLine($"Received message: {context.Message.NomeFila}");
 
-              //  var response = await _httpClient.DeleteAsync($"https://localhost:7042/contato-delete-integration?id={context.Message.Dados.Id}");
-                var response = await _httpClient.DeleteAsync($"http://deletaapi:5134/contato-delete-integration?id={context.Message.Dados.Id}");
+                var response = await _httpClient.DeleteAsync($"http://deletaapi:8080/contato-delete-integration?id={context.Message.Dados.Id}");
                 var responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(responseBody ?? "Dados não encontrados");
                 await Task.CompletedTask;

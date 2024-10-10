@@ -22,8 +22,7 @@ namespace Consumer.Eventos
                 var content = new StringContent(contato, Encoding.UTF8, "application/json");
 
 
-              //  var response = await _httpClient.PutAsync("https://localhost:7047/contato-update-integration", content);
-                var response = await _httpClient.PutAsync("http://alteraapi:5132/contato-update-integration", content);
+                var response = await _httpClient.PutAsync("http://alteraapi:8080/contato-update-integration", content);
                 var responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(responseBody ?? "Dados não encontrados");
                 await Task.CompletedTask;
