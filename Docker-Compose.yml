@@ -40,7 +40,7 @@ services:
       context: .
       dockerfile: ConsultaAPI/Dockerfile
     ports:
-      - 32766:5135
+      - 32766:8080
     environment: 
       - CI=false
       - Otel__Endpoint=http://otlp-collector:4317
@@ -55,7 +55,7 @@ services:
       context: .
       dockerfile: CadastroAPI/Dockerfile
     ports:
-      - 32768:5131
+      - 32768:8080
     environment:
       - CI=false
       - Otel__Endpoint=http://otlp-collector:4317
@@ -70,7 +70,7 @@ services:
       context: .
       dockerfile: AlteraAPI/Dockerfile
     ports:
-      - 32769:5132
+      - 32769:8080
     environment:
       - CI=false
       - Otel__Endpoint=http://otlp-collector:4317
@@ -85,7 +85,7 @@ services:
         context: .
         dockerfile: DeleteAPI/Dockerfile
       ports:
-        - 32767:5134
+        - 32767:8080
       environment:
         - CI=false
         - Otel__Endpoint=http://otlp-collector:4317
