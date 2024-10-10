@@ -42,7 +42,7 @@ builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
-await app.MigrateDatabaseAsync();
+await DatabaseInitializer.MigrateDatabaseAsync(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -73,8 +73,7 @@ app.MapDelete("/contato-delete", async ([FromBody] ContatoViewModel contatoViewM
         var contato = JsonSerializer.Serialize(messageViewModel);
         var content = new StringContent(contato, Encoding.UTF8, "application/json");
 
-      //  var response = await _httpClient.PostAsync("https://localhost:7199/contato", content);
-        var response = await _httpClient.PostAsync("http://productor:5133/contato", content);
+        var response = await _httpClient.PostAsync("http://productor:8080/contato", content);
         var responseBody = await response.Content.ReadAsStringAsync();
 
         if (responseBody.ToUpper().Contains("Ok".ToUpper()))
