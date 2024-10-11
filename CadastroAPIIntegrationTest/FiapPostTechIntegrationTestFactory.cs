@@ -14,6 +14,7 @@ namespace CadastroAPIIntegrationTest
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             var connString = "Server=localhost;Database=Fiap-db-teste;User Id=sa;Password=#sa123456789;TrustServerCertificate=True;";
+            Environment.SetEnvironmentVariable("CI", "true");
 
             builder.ConfigureTestServices(services =>
             {
@@ -27,8 +28,6 @@ namespace CadastroAPIIntegrationTest
                 {
                     using (var scope = serviceProvider.CreateScope())
                     {
-                        Environment.SetEnvironmentVariable("CI", "true");
-
                         var scopedServices = scope.ServiceProvider;
                         var cbContext = scopedServices.GetRequiredService<FiapDataContext>();
                         try
