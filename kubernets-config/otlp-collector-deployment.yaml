@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otlp-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otlp-collector
+  template:
+    metadata:
+      annotations:
+        description: "Deployment OtlpCollector"
+      labels:
+        app: otlp-collector
+    spec:
+      containers:
+        - args:
+            - --config=/etc/otel-collector-config.yml
+          image: otel/opentelemetry-collector:0.95.0
+          name: otlp-collector
+          ports:
+            - containerPort: 8888
+              protocol: TCP
+            - containerPort: 8889
+              protocol: TCP
+            - containerPort: 13133
+              protocol: TCP
+            - containerPort: 4317
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/otel-collector-config.yml
+              name: otlp-collector-cm0
+              subPath: otel-collector-config.yml
+      volumes:
+        - name: otlp-collector-cm0
+          configMap:
+            items:
+              - key: otel-collector-config.yml
+                path: otel-collector-config.yml
+            name: otlp-collector-cm0

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consultaapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: consultaapi
+  template:
+    metadata:
+      annotations:
+        description: "Deployment ConsultaAPI"
+      labels:
+        app: consultaapi
+    spec:
+      containers:
+        - name: consultaapi
+          image: antoniodevio/consultaapi:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: CI
+              value: "false"
+            - name: Otel__Endpoint
+              value: http://otlp-collector:4317

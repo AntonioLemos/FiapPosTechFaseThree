@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productor
+  template:
+    metadata:
+      annotations:
+        description: "Deployment ProdutorApi"
+      labels:
+        app: productor
+    spec:
+      containers:
+        - name: productor
+          image: antoniodevio/produtor:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP

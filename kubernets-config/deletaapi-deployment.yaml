@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deletaapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: deletaapi
+  template:
+    metadata:
+      annotations:
+        description: "Deployment DeleteAPI"
+      labels:
+        app: deletaapi
+    spec:
+      containers:
+        - name: deletaapi
+          image: antoniodevio/deletaapi:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: CI
+              value: "false"
+            - name: Otel__Endpoint
+              value: http://otlp-collector:4317

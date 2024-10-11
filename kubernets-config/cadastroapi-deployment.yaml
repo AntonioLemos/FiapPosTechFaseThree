@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cadastroapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cadastroapi
+  template:
+    metadata:
+      annotations:
+        description: "Deployment CadastroAPI"
+      labels:
+        app: cadastroapi
+    spec:
+      containers:
+        - name: cadastroapi
+          image: antoniodevio/cadastroapi:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: CI
+              value: "false"
+            - name: Otel__Endpoint
+              value: http://otlp-collector:4317

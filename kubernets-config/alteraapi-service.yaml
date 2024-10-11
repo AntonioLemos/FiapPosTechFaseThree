@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alteraapi
+  labels:
+    app: alteraapi
+spec:
+  type: NodePort
+  ports:
+    - port: 8080           
+      targetPort: 8080     
+      nodePort: 31003      
+  selector:
+    app: alteraapi

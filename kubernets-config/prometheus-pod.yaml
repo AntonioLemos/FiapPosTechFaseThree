@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prometheus
+  labels:
+    app: prometheus
+spec:
+  containers:
+    - args:
+        - --config.file=/etc/prometheus/prometheus.yml
+      image: prom/prometheus:latest
+      name: prometheus
+      ports:
+        - containerPort: 9090
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /etc/prometheus/prometheus.yml
+          name: prometheus-cm0
+          subPath: prometheus.yml
+        - mountPath: /prometheus
+          name: prometheus-data
+  restartPolicy: Always
+  volumes:
+    - name: prometheus-cm0
+      configMap:
+        items:
+          - key: prometheus.yml
+            path: prometheus.yml
+        name: prometheus-cm0
+    - name: prometheus-data
+      persistentVolumeClaim:
+        claimName: prometheus-data

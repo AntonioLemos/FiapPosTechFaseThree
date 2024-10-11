@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: alteraapi-replicaset
+  labels:
+    app: alteraapi
+spec:
+  replicas: 3  
+  selector:
+    matchLabels:
+      app: alteraapi
+  template:
+    metadata:
+      labels:
+        app: alteraapi
+    spec:
+      containers:
+        - name: alteraapi
+          image: antoniodevio/alteraapi:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: CI
+              value: "false"
+            - name: Otel__Endpoint
+              value: http://otlp-collector:4317
+      restartPolicy: Always

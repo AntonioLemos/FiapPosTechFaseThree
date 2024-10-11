@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: deletaapi
+  labels:
+    app: deletaapi
+spec:
+  containers:
+    - name: deletaapi
+      image: antoniodevio/deletaapi:latest
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      env:
+        - name: CI
+          value: "false"
+        - name: Otel__Endpoint
+          value: http://otlp-collector:4317
+  restartPolicy: Always
+  

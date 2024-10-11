@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: productor
+  labels:
+    app: productor
+spec:
+  containers:
+    - name: productor
+      image: antoniodevio/produtor:latest
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: Otel__Endpoint
+          value: http://otlp-collector:4317
+  restartPolicy: Always

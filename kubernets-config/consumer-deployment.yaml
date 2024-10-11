@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      annotations:
+        description: "Deployment ConsumerAPI"
+      labels:
+        app: consumer
+    spec:
+      containers:
+        - name: consumer
+          image: antoniodevio/consumer:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP

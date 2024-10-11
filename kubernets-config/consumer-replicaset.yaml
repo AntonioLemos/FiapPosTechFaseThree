@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: consumer-replicaset
+  labels:
+    app: consumer
+spec:
+  replicas: 3  
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+        - name: consumer
+          image: antoniodevio/consumer:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: Otel__Endpoint
+              value: http://otlp-collector:4317
+      restartPolicy: Always

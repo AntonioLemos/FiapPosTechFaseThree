@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: deletaapi-replicaset
+  labels:
+    app: deletaapi
+spec:
+  replicas: 3  
+  selector:
+    matchLabels:
+      app: deletaapi
+  template:
+    metadata:
+      labels:
+        app: deletaapi
+    spec:
+      containers:
+        - name: deletaapi
+          image: antoniodevio/deletaapi:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: CI
+              value: "false"
+            - name: Otel__Endpoint
+              value: http://otlp-collector:4317
+      restartPolicy: Always
