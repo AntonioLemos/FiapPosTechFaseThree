@@ -24,6 +24,7 @@ if (!isCi)
             .AddHttpClientInstrumentation()
             .AddRuntimeInstrumentation()
             .AddProcessInstrumentation()
+            .AddPrometheusExporter()
             .AddOtlpExporter(opts =>
             {
                 opts.Endpoint = new Uri(builder.Configuration["Otel:Endpoint"]);
