@@ -27,7 +27,7 @@ namespace DeletaAPIIntegrationTest
                 {
                     using (var scope = serviceProvider.CreateScope())
                     {
-                        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Integracao-Test");
+                        Environment.SetEnvironmentVariable("CI", "true");
 
                         var scopedServices = scope.ServiceProvider;
                         var cbContext = scopedServices.GetRequiredService<FiapDataContext>();

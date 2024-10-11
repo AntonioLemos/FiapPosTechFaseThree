@@ -48,9 +48,9 @@ namespace Data.DataContext
 
         public void SeedData(ModelBuilder modelBuilder)
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var environment = Environment.GetEnvironmentVariable("CI") == "true";
 
-            if ((environment?.ToUpper() ?? "") == "Integracao-Test".ToUpper())
+            if (environment)
                 modelBuilder.Entity<CONTATO>().HasData(ContatoList.contatos);
 
             modelBuilder.Entity<DDD>().HasData(DDDList.ddds);

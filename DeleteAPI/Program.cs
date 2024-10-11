@@ -43,7 +43,8 @@ builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
-await DatabaseInitializer.MigrateDatabaseAsync(app);
+if (!isCi)
+    await DatabaseInitializer.MigrateDatabaseAsync(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
