@@ -169,4 +169,4 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       Otel__Endpoint: http://otlp-collector:4317
     ports:
-      - 8089:5133
+      - 8089:8080
