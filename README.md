@@ -73,3 +73,32 @@ O projeto inclui testes de integração e unitários para garantir a qualidade e
 
 ![image](https://github.com/user-attachments/assets/66c7f4f2-9a8c-47a8-b0e5-80e4b2748b71)
 
+##
+##
+
+## Fase 4: Orquestração e Gerenciamento com Kubernetes
+
+Este projeto utiliza **Kubernetes** para gerenciar a implantação, escalabilidade e resiliência dos microsserviços.
+
+### Pods, Rótulos e Anotações
+- Os **Pods** hospedam instâncias dos microsserviços.
+- Utilizamos **rótulos** (`labels`) e **anotações** (`annotations`) para organizar e monitorar eficientemente os recursos do cluster.
+
+### Escalabilidade e Resiliência com ReplicaSets e Deployments
+- Implementamos **ReplicaSets** para garantir que o número necessário de réplicas de cada microsserviço esteja sempre em execução, aumentando a disponibilidade.
+- **Deployments** são usados para gerenciar as atualizações dos microsserviços de maneira declarativa e segura, garantindo alta disponibilidade durante mudanças.
+
+### Services e ConfigMaps
+- **Services** foram configurados para garantir a comunicação entre microsserviços e a descoberta automática dos mesmos no cluster.
+- **ConfigMaps** foram utilizados para externalizar as configurações dos microsserviços, permitindo que as alterações sejam feitas sem a necessidade de novos deployments.
+
+### Armazenamento Persistente com Volumes
+- Utilizamos **Persistent Volumes (PV)** e **Persistent Volume Claims (PVC)** para gerenciar o armazenamento persistente dos microsserviços. Isso garante que dados importantes, como os armazenados no banco de dados SQL Server, sejam preservados mesmo após a reinicialização dos Pods.
+- O volume `sqlserver-data` é utilizado para persistir os dados do banco de dados, enquanto volumes separados são utilizados para o armazenamento de dados de configuração do **Prometheus** e **Grafana**.
+
+![1pods](https://github.com/user-attachments/assets/f5d0a031-d431-42f0-a258-431317b0813d)
+
+![2pods](https://github.com/user-attachments/assets/b39b4a7d-c165-4a74-8656-41f82aad1e30)
+
+
+
