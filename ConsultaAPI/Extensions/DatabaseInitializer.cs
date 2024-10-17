@@ -32,7 +32,6 @@ namespace ConsultaAPI.Extensions
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Erro durante a migração ou criação do banco: {ex.Message}");
-                    throw;
                 }
             }
         }
